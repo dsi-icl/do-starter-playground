@@ -10,6 +10,8 @@ import { ThemeProvider } from '../lib/theme-provider';
 
 import appCss from '../style.css?url';
 
+console.log('BASE_URL:', import.meta.env.BASE_URL);
+
 export const Route = createRootRouteWithContext()({
     head: () => ({
         meta: [
@@ -31,7 +33,7 @@ export const Route = createRootRouteWithContext()({
         links: [
             {
                 rel: 'icon',
-                href: '/favicon.ico'
+                href: `${import.meta.env.BASE_URL}favicon.svg`
             },
             { rel: 'stylesheet', href: appCss }
         ]

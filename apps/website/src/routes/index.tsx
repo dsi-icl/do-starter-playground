@@ -47,8 +47,8 @@ function HomePage() {
 
     const controlPanels = [
         // Distinct operator identities simulate simultaneous collaboration.
-        { id: 'a', label: 'Tablet #1', src: '/control?operator=A' },
-        { id: 'b', label: 'Tablet #2', src: '/control?operator=B' }
+        { id: 'a', label: 'Tablet #1', src: `${import.meta.env.BASE_URL}control?operator=A` },
+        { id: 'b', label: 'Tablet #2', src: `${import.meta.env.BASE_URL}control?operator=B` }
     ];
 
     const toggleDisconnect = (id: string) => {
@@ -69,7 +69,9 @@ function HomePage() {
         const nonce = refreshNonceById[screen.id] ?? 0;
         const disconnected = disconnectedById[screen.id] ?? false;
 
-        return disconnected ? `/noop?v=${nonce}` : `/screen?c=${screen.c}&r=${screen.r}&v=${nonce}`;
+        return disconnected
+            ? `${import.meta.env.BASE_URL}noop?v=${nonce}`
+            : `${import.meta.env.BASE_URL}screen?c=${screen.c}&r=${screen.r}&v=${nonce}`;
     };
 
     const toggleControlDisconnect = (id: string) => {
@@ -90,7 +92,9 @@ function HomePage() {
         const nonce = refreshControlNonceById[panel.id] ?? 0;
         const disconnected = disconnectedControlById[panel.id] ?? false;
         // Nonce query param forces iframe reload when "refresh" is pressed.
-        return disconnected ? `/noop?v=${nonce}` : `${panel.src}&v=${nonce}`;
+        return disconnected
+            ? `${import.meta.env.BASE_URL}noop?v=${nonce}`
+            : `${panel.src}&v=${nonce}`;
     };
 
     return (

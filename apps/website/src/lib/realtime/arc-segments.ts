@@ -1,4 +1,4 @@
-const ARC_SEGMENTS_URL = '/data/arc-segments.json';
+const ARC_SEGMENTS_URL = `${import.meta.env.BASE_URL}data/arc-segments.json`;
 
 let arcSegmentsRequest: Promise<unknown[] | null> | null = null;
 
