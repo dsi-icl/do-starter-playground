@@ -7,7 +7,6 @@ import { routeTree } from './routeTree.gen';
 export function getRouter() {
     const router = createRouter({
         routeTree,
-        basepath: import.meta.env.BASE_URL,
         defaultPreload: 'intent',
         defaultErrorComponent: DefaultCatchBoundary,
         defaultNotFoundComponent: DefaultNotFound,
