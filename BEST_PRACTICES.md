@@ -184,7 +184,31 @@ This repository doesn not contain any testing harness at the moment but a minimu
 - Regression checks for reconnect and hello-state restoration.
 - Visual smoke checks for map fallback path in iframe context.
 
-## 13. Deployment Checklist
+## 13. Sub-Path Deployment
+
+This app is designed to run under a URL prefix (for example `/my-demo/`) rather than at the domain root. Three layers must all be consistent:
+
+**Build time** — `vite.config.ts` reads `process.env.BASE_PATH` and passes it to both Vite's `base` option (so asset URLs in HTML are prefixed) and Nitro's `baseURL` (so the server strips the prefix from incoming requests):
+
+```ts
+base: (process.env.BASE_PATH ?? '/', nitro({ baseURL: process.env.BASE_PATH ?? '/' }));
+```
+
+Build with:
+
+```bash
+BASE_PATH=/my-demo/ pnpm build
+```
+
+**Router** — `router.tsx` reads `import.meta.env.BASE_URL` (set by Vite from `base`) so TanStack Router generates and matches routes under the prefix:
+
+```ts
+basepath: import.meta.env.BASE_URL;
+```
+
+**In-app absolute paths** — any hardcoded absolute path (`/bus`, `/screen`, `/data/foo.json`, `/favicon.ico`, etc.) must be prefixed with `import.meta.env.BASE_URL` so it resolves correctly under the prefix. Use `${import.meta.env.BASE_URL}bus` rather than `/bus`; since `BASE_URL` always ends with `/`, drop the leading slash from the path segment.
+
+## 14. Deployment Checklist
 
 The DO would typically accompany you through this process but before shipping you should:
 
