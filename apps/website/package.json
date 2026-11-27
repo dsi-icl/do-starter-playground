@@ -22,7 +22,9 @@
         "crossws": "catalog:",
         "maplibre-gl": "catalog:",
         "react": "catalog:",
-        "react-dom": "catalog:"
+        "react-dom": "catalog:",
+        "vite-plugin-pwa": "catalog:",
+        "xlsx": "catalog:"
     },
     "devDependencies": {
         "@rolldown/plugin-babel": "catalog:",

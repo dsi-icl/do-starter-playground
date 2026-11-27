@@ -20,19 +20,21 @@ catalog:
   "@types/node": ^24
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
+  "@vis.gl/react-maplibre": ^8.1.0
   "@vitejs/plugin-react": ^6.0.1
-  crossws: ^0.4.4
   babel-plugin-react-compiler: ^1.0.0
+  crossws: ^0.4.4
+  maplibre-gl: ^5.9.0
   nitro: 3.0.260311-beta
   react: ^19.2.4
   react-dom: ^19.2.4
-  "@vis.gl/react-maplibre": ^8.1.0
-  maplibre-gl: ^5.9.0
   tailwindcss: ^4.2.2
   typescript: ^6
   vite: npm:@voidzero-dev/vite-plus-core@latest
+  vite-plugin-pwa: ^2.0.0
   vite-plus: latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
+  xlsx: ^0.18.5
 
 catalogMode: prefer
 overrides:

@@ -1,53 +1,65 @@
-# DO App Kit
+# Gatebook
 
-A starter for creating DO custom applications.
+Gatebook is an installable, offline-ready attendee register for event staff. Import an `.xlsx`
+roster, search by attendee name or email, filter the expected group by one column and any number
+of values, and mark each person **Here** or **Not here**. People with no status remain clearly
+undecided. Registers are saved as named snapshots, so earlier absences remain visible later in the
+day.
 
-This starter repo is built with Vite+.
+The workbook is parsed in the browser. Roster data, register results, and backups are kept on the
+current device; there is no account or cross-device sync.
 
-## Runtime Context Note (Top-Level vs Iframe)
+## Run locally
 
-Data Observatory deployments may render an app either:
+Install the workspace dependencies and start the website app:
 
-- as a top-level document, or
-- inside one or more iframes (for multi-screen orchestration/simulation).
-
-This matters for graphics-heavy features: iframe-based deployments can increase pressure on
-browser/GPU context limits (especially with WebGL). For that reason, this example includes
-runtime-aware rendering decisions and fallback strategies so behavior remains stable in both modes.
-
-## Stack Used In This Example
-
-The example app in `apps/website` focuses on three package groups:
-
-- `@tanstack/react-router`: file-based routing and route-level app structure (`/`, `/control`, `/screen`, `/bus`).
-- `@tanstack/pacer`: throttling of high-frequency control events before broadcast (for example slider updates).
-- Mapping stack:
-  `maplibre-gl`, `@vis.gl/react-maplibre`, `@deck.gl/core`, `@deck.gl/layers`, `@deck.gl/react`.
-  These are used to render the map, draw animated paths/markers, and support both richer and iframe-safe rendering paths. We strongly recommend the use of Deck.GL with MapLibre as the DO natively supports them.
-- `vite-plus` (`vp`): monorepo task runner/repo manager used for project commands (`vp run dev`, `vp run build -r`, etc.).
-
-## Development
-
-- Check everything is ready:
-
-```bash
-vp run ready
+```powershell
+corepack pnpm install
+corepack pnpm --filter website dev
 ```
 
-- Run the tests:
+Open the local URL printed by the dev server. The development server is for previewing and does not
+provide the production service worker needed for offline use.
 
-```bash
-vp run test -r
+## Build and host
+
+Create a production build:
+
+```powershell
+corepack pnpm --filter website build
 ```
 
-- Build the monorepo:
+GitHub Pages deployment is configured in `.github/workflows/pages.yml`. TanStack Start prerenders
+the app routes during the normal Nitro build, and the workflow publishes only the generated static
+files in `.output/public`; no server is deployed. The Vite base, router, manifest, and service worker
+are scoped to the repository subpath. Enable **Settings → Pages → Build and deployment → Source →
+GitHub Actions**. Merging the workflow to `main` triggers the first deployment; later pushes to
+`main` deploy updates. The expected project-site URL is
+`https://dsi-icl.github.io/do-starter-playground/`. No deployment has been run from this worktree.
 
-```bash
-vp run build -r
-```
+The GitHub Pages build prerenders the app routes and emits the service worker and manifest within
+the repository subpath. The roster and check-ins remain local to each browser/device; Pages does
+not receive attendee data. GitHub Pages cannot host the repository's existing `/bus` WebSocket
+endpoint, so the legacy `/control` and `/screen` synchronized demo will not work there; Gatebook
+does not depend on that endpoint.
 
-- Run the development server:
+## Install on a phone or tablet
 
-```bash
-vp run dev
-```
+- **Xiaomi Android:** open the HTTPS app URL in Chrome, tap **Install app** in Gatebook (or use
+  Chrome's menu and choose **Install app** / **Add to Home screen**).
+- **iPad:** open the HTTPS app URL in Safari, tap **Share**, then **Add to Home Screen**.
+
+The first visit and installation must happen while online. Leave Gatebook open until its header
+shows **Offline ready**; the service worker then has the app files available for future offline
+launches. Each browser installation has its own local roster and event records.
+
+## Event-day data
+
+- Download a **JSON backup** to preserve the roster and every register, and use **Restore a backup**
+  to recover it on that device.
+- **CSV export** includes the roster and each register's Here / Not here / No mark status.
+- Starting a new event clears the old event's registers but keeps the roster. Importing a new
+  spreadsheet replaces both the roster and the current event history after confirmation.
+- Browser data can be removed by clearing site data, and it does not follow you to another device.
+  Keep an exported backup somewhere safe, especially before changing devices or clearing browser
+  storage.
